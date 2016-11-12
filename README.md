@@ -15,4 +15,4 @@ This is basicly a webapp built on top of the microsoft bot framework using the n
 fetch and provide the data.The webapp is hosted on Microsoft Azure.
 
 ## Screenshots
-<img src="http://imgur.com/a/ZhDaJ">See This Link</img>
+<a href="http://imgur.com/a/ZhDaJ">See This Link</a>
