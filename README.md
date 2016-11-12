@@ -1,3 +1,4 @@
+
 ## madlabs
 
 This is a simple bot that communicates with the user to give him realtime updates of news. He can use already familiar platforms like slack,facebook,skype,messaging,email
@@ -12,3 +13,6 @@ please refer the same.
 
 This is basicly a webapp built on top of the microsoft bot framework using the node.js SDK for the same.It make use of the manorama API to 
 fetch and provide the data.The webapp is hosted on Microsoft Azure.
+
+## Screenshots
+<img src="http://imgur.com/a/ZhDaJ">See This Link</img>
