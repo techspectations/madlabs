@@ -26,20 +26,54 @@ server.post('/api/messages', connector.listen());
 // Bots Dialogs
 //=========================================================
 
-bot.dialog('/', [function (session) {
-    builder.Prompts.choice(session, "What Do u Like ??", "Menu|News Search");
+
+bot.dialog('/', [
+    function (session) {
+    builder.Prompts.choice(session, "Hi I'm the Manorama Bot!", "Menu|Search");
 },
 function(session,results){
     if(results.response){
         if(results.response.entity == "Menu")
             session.beginDialog('/newscategories');
+        if(results.response.entity == "Search")
+            session.beginDialog('/newssearch');
     }
 
 }]);
 
+bot.dialog("/newssearch",[
+    function(session){
+        builder.Prompts.text(session, "What should i search for ?");
+    },
+    function(session,results){
+        session.userData.query = results.response;
+        api.search("en","all",session.userData.query,"","","",function(data2){
+            for(var i=0;i<3;i++){
+                     var msg = new builder.Message(session)
+                    .textFormat(builder.TextFormat.xml)
+                    .attachments([
+                        new builder.HeroCard(session)
+                            .title(data2['articles'][i]['title'])
+                            .subtitle(data2['articles'][i]['lastmodified'])
+                            .text(data2['articles'][i]["imageDescription"])
+                            .images([
+                                builder.CardImage.create(session, data2['articles'][i]['thumbnail'])
+                            ])
+                            .tap(builder.CardAction.openUrl(session, data2['articles'][i]['articleURL']))
+                    ]);
+
+                 session.send(msg);
+            }
+        });
+       
+       session.endConversation(); 
+    }
+]);
+
+
 bot.dialog("/newscategories",[
     function(session){
-    builder.Prompts.choice(session,"Sections","General|Sports|Bussiness|Entertaintment|Health");
+    builder.Prompts.choice(session,"What would you like to read about ?","General|Sports|Bussiness|Entertaintment|Health");
     },
 function(session,results){
    if(results.response){
@@ -62,6 +96,7 @@ function(session,results){
         }
         else if(results.response.entity == "Health"){
             //Fetch Health News
+            session.beginDialog("/HealthNews");
                 
         }
         
@@ -338,6 +373,7 @@ bot.dialog('/Bussiness',[
         session.endDialog();
     }
 ]);
+
 bot.dialog('/EntertaintmentNews',[
     function(session){
     builder.Prompts.choice(session,"Sections","General|Music|Movies|Art");
@@ -417,6 +453,110 @@ bot.dialog('/EntertaintmentNews',[
             if(results.response.entity == "Art")
             {
                 api.getArticles("en","","","entertainment_art-and-culture",function(data){
+                    api.getArticleDetails("en",data["articleSummary"][0]['articleID'],function(data2){
+                         var msg = new builder.Message(session)
+                    .textFormat(builder.TextFormat.xml)
+                    .attachments([
+                        new builder.HeroCard(session)
+                            .title(data2['title'])
+                            .subtitle(data2['authorname'])
+                            .text(data2["imageDescription"])
+                            .images([
+                                builder.CardImage.create(session, data2['thumbnail'])
+                            ])
+                            .tap(builder.CardAction.openUrl(session, data2['articleURL']))
+                    ]);
+
+                         session.send(msg);
+                    });
+
+                   
+                });
+            }
+        }
+        session.endDialog();
+    }
+]);
+
+bot.dialog('/HealthNews',[
+    function(session){
+    builder.Prompts.choice(session,"Sections","MentalHealth|Ayurveda|Nutrition|Fitness");
+    
+    },
+    function(session,results){
+        if(results.response){
+            if(results.response.entity == "MentalHealth")
+            {
+                api.getArticles("en","","","wellness_mental-health",function(data){
+                    api.getArticleDetails("en",data["articleSummary"][0]['articleID'],function(data2){
+                         var msg = new builder.Message(session)
+                    .textFormat(builder.TextFormat.xml)
+                    .attachments([
+                        new builder.HeroCard(session)
+                            .title(data2['title'])
+                            .subtitle(data2['authorname'])
+                            .text(data2["imageDescription"])
+                            .images([
+                                builder.CardImage.create(session, data2['thumbnail'])
+                            ])
+                            .tap(builder.CardAction.openUrl(session, data2['articleURL']))
+                    ]);
+
+                         session.send(msg);
+                    });
+
+                   
+                });
+            }
+            if(results.response.entity == "Ayurveda")
+            {
+                api.getArticles("en","","","wellness_ayurveda",function(data){
+                    api.getArticleDetails("en",data["articleSummary"][0]['articleID'],function(data2){
+                         var msg = new builder.Message(session)
+                    .textFormat(builder.TextFormat.xml)
+                    .attachments([
+                        new builder.HeroCard(session)
+                            .title(data2['title'])
+                            .subtitle(data2['authorname'])
+                            .text(data2["imageDescription"])
+                            .images([
+                                builder.CardImage.create(session, data2['thumbnail'])
+                            ])
+                            .tap(builder.CardAction.openUrl(session, data2['articleURL']))
+                    ]);
+
+                         session.send(msg);
+                    });
+
+                   
+                });
+            }
+            if(results.response.entity == "Nutrition")
+            {
+                api.getArticles("en","","","wellness_diet-\u0026-nutrition",function(data){
+                    api.getArticleDetails("en",data["articleSummary"][0]['articleID'],function(data2){
+                         var msg = new builder.Message(session)
+                    .textFormat(builder.TextFormat.xml)
+                    .attachments([
+                        new builder.HeroCard(session)
+                            .title(data2['title'])
+                            .subtitle(data2['authorname'])
+                            .text(data2["imageDescription"])
+                            .images([
+                                builder.CardImage.create(session, data2['thumbnail'])
+                            ])
+                            .tap(builder.CardAction.openUrl(session, data2['articleURL']))
+                    ]);
+
+                         session.send(msg);
+                    });
+
+                   
+                });
+            }
+            if(results.response.entity == "Fitness")
+            {
+                api.getArticles("en","","","wellness_fitness",function(data){
                     api.getArticleDetails("en",data["articleSummary"][0]['articleID'],function(data2){
                          var msg = new builder.Message(session)
                     .textFormat(builder.TextFormat.xml)
