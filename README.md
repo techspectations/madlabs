@@ -1,5 +1,5 @@
 
-## madlabs
+## MadLabs - ManoramaBot
 
 This is a simple bot that communicates with the user to give him realtime updates of news. He can use already familiar platforms like slack,facebook,skype,messaging,email
 and many others to communicate with manorama to avail services.
