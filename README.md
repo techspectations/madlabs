@@ -16,3 +16,10 @@ fetch and provide the data.The webapp is hosted on Microsoft Azure.
 
 ## Screenshots
 <a href="http://imgur.com/a/ZhDaJ">See This Link</a>
+
+## Prerequesites
+<ul>
+<li>node.js</li>
+<li>npm</li>
+<li>Microsoft Bot framework SDK</li>
+</ul>
